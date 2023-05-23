@@ -59,11 +59,11 @@
     }
   ],
   "outputs": {
-    "storageNameA": {
+    "storageA": {
       "type": "string",
       "value": "[variables('storageAName')]"
     },
-    "storageNameB": {
+    "storageB": {
       "type": "string",
       "value": "[variables('storageBName')]"
     }
