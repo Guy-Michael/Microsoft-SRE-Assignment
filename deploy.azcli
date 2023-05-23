@@ -1,9 +1,10 @@
 #!/bin/bash
-
-export resourceGroupName=$"guyResources2"
-# location="westus"
-templatePath="./arm-templates"
+resourceGroupName="GuyTestResourceGroupDeployment"
+location="westus"
 deploymentName="tempName"
+
+templatePath="./arm-templates"
+
 storageAccountsTemplateFile="$templatePath/Storage/storage.json"
 storageParametersFile="$templatePath/Storage/storage.parameters.json"
 
@@ -11,20 +12,35 @@ vmTemplateFile="$templatePath/VM/linuxVM.json"
 vmParametersFile="$templatePath/VM/linuxVM.parameters.json"
 
 # create resource group
-# az group create --name $resourceGroupName --location $location
+echo "Creating a resource group named $resourceGroupName"
+az group create --name $resourceGroupName --location $location
 
+#deploy storage accounts
+echo "Deploying 2 storage accounts"
 az deployment group create \
     --name $deploymentName \
     --resource-group $resourceGroupName \
     --template-file $storageAccountsTemplateFile \
     --parameters $storageParametersFile
 
+#fetch storage account names from output
+export storageNameA=$(az deployment group show \
+    -g $resourceGroupName \
+    -n $deploymentName \
+    --query properties.outputs.storageNameA.value)
+
+export storageNameB=$(az deployment group show \
+    -g $resourceGroupName \
+    -n $deploymentName \
+    --query properties.outputs.storageNameB.value)
+
+
+echo "storage 1 is: $storageNameA"
+echo "storage 2 is: $storageNameB"
 #fetch storage account names
 
+echo "Deploying an Ubuntu VM"
 #deploy VM
 
-#fetch VM name (see if neccecary)
 
 #run dotnet script
-echo $storageNames
-# export storage_deployment_outputs=$(az group deployment create --resource-group guyResourceGroup --name storage)
