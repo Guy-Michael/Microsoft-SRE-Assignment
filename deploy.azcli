@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export resourceGroupName=$"guyResources2"
+# location="westus"
+templatePath="./arm-templates"
+deploymentName="tempName"
+storageAccountsTemplateFile="$templatePath/Storage/storage.json"
+storageParametersFile="$templatePath/Storage/storage.parameters.json"
+
+vmTemplateFile="$templatePath/VM/linuxVM.json"
+vmParametersFile="$templatePath/VM/linuxVM.parameters.json"
+
+# create resource group
+# az group create --name $resourceGroupName --location $location
+
+az deployment group create \
+    --name $deploymentName \
+    --resource-group $resourceGroupName \
+    --template-file $storageAccountsTemplateFile \
+    --parameters $storageParametersFile
+
+#fetch storage account names
+
+#deploy VM
+
+#fetch VM name (see if neccecary)
+
+#run dotnet script
+echo $storageNames
+# export storage_deployment_outputs=$(az group deployment create --resource-group guyResourceGroup --name storage)
