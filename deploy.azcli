@@ -1,46 +1,66 @@
 #!/bin/bash
-resourceGroupName="GuyTestResourceGroupDeployment"
-location="westus"
-deploymentName="tempName"
 
-templatePath="./arm-templates"
+InitVariables()
+{
+    export resourceGroupName="guyResourceGroupA"
+    export location="westus"
+    export deploymentName="deploymentD"
 
-storageAccountsTemplateFile="$templatePath/Storage/storage.json"
-storageParametersFile="$templatePath/Storage/storage.parameters.json"
+    export templatePath="./arm-templates"
 
-vmTemplateFile="$templatePath/VM/linuxVM.json"
-vmParametersFile="$templatePath/VM/linuxVM.parameters.json"
+    export storageAccountsTemplateFile="$templatePath/Storage/storage.json"
+    export storageParametersFile="$templatePath/Storage/storage.parameters.json"
 
-# create resource group
-echo "Creating a resource group named $resourceGroupName"
-az group create --name $resourceGroupName --location $location
+    export vmTemplateFile="$templatePath/VM/linuxVM.json"
+    export vmParametersFile="$templatePath/VM/linuxVM.parameters.json"
+}
 
-#deploy storage accounts
-echo "Deploying 2 storage accounts"
-az deployment group create \
-    --name $deploymentName \
-    --resource-group $resourceGroupName \
-    --template-file $storageAccountsTemplateFile \
-    --parameters $storageParametersFile
+CreateResourceGroup()
+{
+    echo "Creating a resource group named $resourceGroupName"
+    az group create --name $resourceGroupName --location $location
+}
 
-#fetch storage account names from output
-export storageNameA=$(az deployment group show \
-    -g $resourceGroupName \
-    -n $deploymentName \
-    --query properties.outputs.storageNameA.value)
+DeployStorageAccounts()
+{
+    echo "Deploying 2 storage accounts"
+    az deployment group create \
+        --name $deploymentName \
+        --resource-group $resourceGroupName \
+        --template-file $storageAccountsTemplateFile \
+        --parameters $storageParametersFile
 
-export storageNameB=$(az deployment group show \
-    -g $resourceGroupName \
-    -n $deploymentName \
-    --query properties.outputs.storageNameB.value)
+}
 
+GetConnectionString()
+{
+    local accountName=$(az deployment group show \
+        -g $resourceGroupName \
+        -n $deploymentName \
+        --query properties.outputs.$1.value \
+        --output tsv)
 
-echo "storage 1 is: $storageNameA"
-echo "storage 2 is: $storageNameB"
-#fetch storage account names
+    local key=$(az storage account keys list \
+        --resource-group $resourceGroupName \
+        -n "$accountName" \
+        --query [0].value \
+        --output tsv)
 
-echo "Deploying an Ubuntu VM"
-#deploy VM
+    echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
+}
 
+RunDotnetApplication()
+{
+    echo "running dotnet application"
+    dotnet build
+    dotnet run ./UploadAndCopyBlobs.cs $resourceGroupName $1 $2
+}
 
-#run dotnet script
+InitVariables
+CreateResourceGroup
+DeployStorageAccounts
+
+export connectionStringA=$(GetConnectionString "storageA")
+export connectionStringB=$(GetConnectionString "storageB")
+
+RunDotnetApplication $connectionStringA $connectionStringB
