@@ -2,7 +2,7 @@
 
 InitVariables()
 {
-    export resourceGroupName="guyResourceGroupA"
+    export resourceGroupName="guyResourceGroupB"
     export location="westus"
     export storageDeploymentName="deploymentStorageAccounts"
     export vmDeploymentName="deploymentVM"

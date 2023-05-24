@@ -1,2 +1,2 @@
 steps:
-  - script: "echo hello!!"
+  - script: "./deploy.sh"
