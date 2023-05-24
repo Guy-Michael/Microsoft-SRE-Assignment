@@ -2,9 +2,11 @@
 
 InitVariables()
 {
-    export resourceGroupName="guyResourceGroupC"
+    export resourceGroupName="guyResourceGroupD"
     export location="westus"
-    export deploymentName="deploymentA"
+    export deploymentName="deployment"
+    export storageDeploymentName="deploymentStorageAccounts"
+    export vmDeploymentName="deploymentVM"
 
     export templatePath="./arm-templates"
 
@@ -25,7 +27,7 @@ DeployStorageAccounts()
 {
     echo "Deploying 2 storage accounts"
     az deployment group create \
-        --name $deploymentName \
+        --name $storageDeploymentName \
         --resource-group $resourceGroupName \
         --template-file $storageAccountsTemplateFile \
         --parameters $storageParametersFile
@@ -35,7 +37,7 @@ GetConnectionString()
 {
     local accountName=$(az deployment group show \
         -g $resourceGroupName \
-        -n $deploymentName \
+        -n $storageDeploymentName \
         --query properties.outputs.$1.value \
         --output tsv)
 
@@ -50,8 +52,10 @@ GetConnectionString()
 
 DeployVM()
 {
+    echo "Deploying linux VM"
+
     az deployment group create \
-    --name $deploymentName \
+    --name $vmDeploymentName \
     --resource-group $resourceGroupName \
     --template-file $vmTemplateFile \
     --parameters $vmParametersFile
@@ -64,12 +68,39 @@ RunDotnetApplication()
     dotnet run ./UploadAndCopyBlobs.cs $resourceGroupName $1 $2
 }
 
+InstallDotNet()
+{
+    local vmName
+    echo "getting name"
+
+    vmName=$(az deployment group show \
+    -n $vmDeploymentName \
+    -g $resourceGroupName \
+    --query properties.outputs.name.value \
+    --output tsv)
+
+    echo $vmName
+    echo "running command"
+    az vm run-command invoke \
+    -n "$vmName" \
+    -g $resourceGroupName \
+    --command-id RunShellScript \
+    --scripts "echo hello"
+    # --scripts @./install-dotnet.sh
+}
+
 InitVariables
-CreateResourceGroup
-DeployStorageAccounts
-DeployVM
+# CreateResourceGroup
+# DeployStorageAccounts
+# DeployVM
+# InstallDotNet
 
-export connectionStringA=$(GetConnectionString "storageA")
-export connectionStringB=$(GetConnectionString "storageB")
+# connectionStringA=$(GetConnectionString "storageA")
+# connectionStringB=$(GetConnectionString "storageB")
 
-RunDotnetApplication $connectionStringA $connectionStringB
+./handle-blobs.sh $resourceGroupName $storageDeploymentName
+
+
+
+
+# RunDotnetApplication $connectionStringA $connectionStringB
