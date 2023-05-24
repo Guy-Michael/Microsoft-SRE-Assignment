@@ -2,17 +2,13 @@
 
 InitVariables()
 {
-    export resourceGroupName="guyResourceGroupD"
+    export resourceGroupName="guyResourceGroupA"
     export location="westus"
-    export deploymentName="deployment"
     export storageDeploymentName="deploymentStorageAccounts"
     export vmDeploymentName="deploymentVM"
-
     export templatePath="./arm-templates"
-
     export storageAccountsTemplateFile="$templatePath/Storage/storage.json"
     export storageParametersFile="$templatePath/Storage/storage.parameters.json"
-
     export vmTemplateFile="$templatePath/VM/linuxVM.json"
     export vmParametersFile="$templatePath/VM/linuxVM.parameters.json"
 }
@@ -61,46 +57,9 @@ DeployVM()
     --parameters $vmParametersFile
 }
 
-RunDotnetApplication()
-{
-    echo "running dotnet application"
-    dotnet build
-    dotnet run ./UploadAndCopyBlobs.cs $resourceGroupName $1 $2
-}
-
-InstallDotNet()
-{
-    local vmName
-    echo "getting name"
-
-    vmName=$(az deployment group show \
-    -n $vmDeploymentName \
-    -g $resourceGroupName \
-    --query properties.outputs.name.value \
-    --output tsv)
-
-    echo $vmName
-    echo "running command"
-    az vm run-command invoke \
-    -n "$vmName" \
-    -g $resourceGroupName \
-    --command-id RunShellScript \
-    --scripts "echo hello"
-    # --scripts @./install-dotnet.sh
-}
-
 InitVariables
-# CreateResourceGroup
-# DeployStorageAccounts
-# DeployVM
-# InstallDotNet
+CreateResourceGroup
+DeployStorageAccounts
+DeployVM
 
-# connectionStringA=$(GetConnectionString "storageA")
-# connectionStringB=$(GetConnectionString "storageB")
-
-./handle-blobs.sh $resourceGroupName $storageDeploymentName
-
-
-
-
-# RunDotnetApplication $connectionStringA $connectionStringB
+# ./handle-blobs.sh $resourceGroupName $storageDeploymentName

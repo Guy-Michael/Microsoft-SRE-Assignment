@@ -220,6 +220,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2021-11-01",
       "name": "[parameters('vmName')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "location": "[parameters('location')]",
       "properties": {
         "hardwareProfile": {
@@ -230,7 +233,8 @@
             "createOption": "FromImage",
             "managedDisk": {
               "storageAccountType": "[variables('osDiskType')]"
-            }
+            },
+            
           },
           "imageReference": "[variables('imageReference')[parameters('ubuntuOSVersion')]]"
         },
