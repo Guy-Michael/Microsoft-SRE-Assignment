@@ -2,9 +2,9 @@
 
 InitVariables()
 {
-    export resourceGroupName="guyResourceGroupA"
+    export resourceGroupName="guyResourceGroupC"
     export location="westus"
-    export deploymentName="deploymentD"
+    export deploymentName="deploymentA"
 
     export templatePath="./arm-templates"
 
@@ -29,7 +29,6 @@ DeployStorageAccounts()
         --resource-group $resourceGroupName \
         --template-file $storageAccountsTemplateFile \
         --parameters $storageParametersFile
-
 }
 
 GetConnectionString()
@@ -49,6 +48,15 @@ GetConnectionString()
     echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
 }
 
+DeployVM()
+{
+    az deployment group create \
+    --name $deploymentName \
+    --resource-group $resourceGroupName \
+    --template-file $vmTemplateFile \
+    --parameters $vmParametersFile
+}
+
 RunDotnetApplication()
 {
     echo "running dotnet application"
@@ -59,6 +67,7 @@ RunDotnetApplication()
 InitVariables
 CreateResourceGroup
 DeployStorageAccounts
+DeployVM
 
 export connectionStringA=$(GetConnectionString "storageA")
 export connectionStringB=$(GetConnectionString "storageB")
