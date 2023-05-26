@@ -57,9 +57,14 @@ DeployVM()
     --parameters $vmParametersFile
 }
 
+echo "Init variables"
 InitVariables
-CreateResourceGroup
-DeployStorageAccounts
-DeployVM
 
-# ./handle-blobs.sh $resourceGroupName $storageDeploymentName
+echo "Create ResourceGroup"
+CreateResourceGroup
+
+echo "Deploy Storage Accounts"
+DeployStorageAccounts
+
+echo "Deploy VM"
+DeployVM
