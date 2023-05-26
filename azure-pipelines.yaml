@@ -1,20 +1,21 @@
 steps:
   - script: deploy.sh
+    displayName: "Run deploy shell script"
     env:
       GROUP_NAME: $(groupName)
       LOCATION: $(location)
       STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
       VM_DEPLOYMENT_NAME: $(vmDeploymentName)
-    displayName: "Run deploy shell script"
     
   - script: install-utilities.sh
+    displayName: "Install Utilities on VM"
+    workingDirectory: utility-scripts
     env:
       GROUP_NAME: $(resourceGroupName)
       MACHINE_NAME: $(vmName)
-      displayName: "Install Utilities on VM"
-    workingDirectory: utility-scripts
       
   - script: handle-blobs.sh
+    displayName: "Handle Blobs on VM"
     env:
         GROUP_NAME: $(resourceGroupName)
         MACHINE_NAME: $(vmName)
