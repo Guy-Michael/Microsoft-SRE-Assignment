@@ -5,14 +5,6 @@ location=$LOCATION
 storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
 
-{
-echo "group $GROUP_NAME"
-echo "group $LOCATION"
-echo "group $STORAGE_DEPLOYMENT_NAME"
-echo "group $VM_DEPLOYMENT_NAME"
-} >> ~/Desktop/files/log.txt
-
-
 InitVariables()
 {
     export templatePath="./arm-templates"
@@ -49,7 +41,28 @@ DeployVM()
     --parameters $vmParametersFile
 }
 
+GetConnectionString()
+{
+    local accountName=$(az deployment group show \
+        -g "$resourceGroupName" \
+        -n "$storageDeploymentName" \
+        --query properties.outputs.$1.value \
+        --output tsv)
+
+    local key=$(az storage account keys list \
+        --resource-group "$resourceGroupName" \
+        -n "$accountName" \
+        --query [0].value \
+        --output tsv)
+
+    echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
+}
+
 InitVariables
 CreateResourceGroup
 DeployStorageAccounts
 DeployVM
+
+#Output the connection string to the yaml pipeline
+echo "##vso[task.setvariable variable=connectionStringA]$(GetConnectionString storageA)"
+echo "##vso[task.setvariable variable=connectionStringB]$(GetConnectionString storageB)"

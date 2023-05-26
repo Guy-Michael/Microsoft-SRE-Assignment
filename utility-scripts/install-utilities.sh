@@ -4,9 +4,15 @@
 machineName=$VM_NAME
 resourceGroupName=$GROUP_NAME
 
-# # Azure CLI
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# Check if both can work in one script
+az vm run-command invoke \
+    -n "$machineName" \
+    -g "$resourceGroupName" \
+    --scripts "curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash" \
+                "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh ./get-docker.sh"
 
-# # Docker
-curl -fsSL https://get.docker.com -o get-docker.sh 
-sudo sh ./get-docker.sh
+
+# curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# # # Docker
+# curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh ./get-docker.sh

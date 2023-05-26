@@ -7,9 +7,16 @@ steps:
       VM_DEPLOYMENT_NAME: $(vmDeploymentName)
     displayName: "Run deploy shell script"
     
-  - script: install-docker-ubuntu.sh
+  - script: install-utilities.sh
     env:
       GROUP_NAME: $(resourceGroupName)
       MACHINE_NAME: $(vmName)
-    displayName: "Install Docker on VM"
+      displayName: "Install Utilities on VM"
     workingDirectory: utility-scripts
+      
+  - script: handle-blobs.sh
+    env:
+        GROUP_NAME: $(resourceGroupName)
+        MACHINE_NAME: $(vmName)
+        CONNECTION_STRING_A: $(CONNECTION_STRING_A)
+        CONNECTION_STRING_B: $(CONNECTION_STRING_B)
