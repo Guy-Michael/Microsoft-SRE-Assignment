@@ -1,2 +1,6 @@
 steps:
   - script: "echo hello!!"
+    displayName: "one line script"
+  - script: "./deploy.sh"
+    workingDirectory: "."
+    displayName: "Run deploy shell script"
