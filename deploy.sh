@@ -1,9 +1,9 @@
 #!/bin/bash
 
-resourceGroupName=$(GROUPNAME)
-location=$(LOCATION)
-storageDeploymentName=$(STORAGEDEPLOYMENTNAME)
-vmDeploymentName=$(VMDEPLOYMENTNAME)
+resourceGroupName=$GROUP_NAME
+location=$LOCATION
+storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
+vmDeploymentName=$VM_DEPLOYMENT_NAME
 
 InitVariables()
 {
