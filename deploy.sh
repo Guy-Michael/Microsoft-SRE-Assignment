@@ -29,23 +29,6 @@ DeployStorageAccounts()
         --parameters $storageParametersFile
 }
 
-GetConnectionString()
-{
-    local accountName=$(az deployment group show \
-        -g $resourceGroupName \
-        -n $storageDeploymentName \
-        --query properties.outputs.$1.value \
-        --output tsv)
-
-    local key=$(az storage account keys list \
-        --resource-group $resourceGroupName \
-        -n "$accountName" \
-        --query [0].value \
-        --output tsv)
-
-    echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
-}
-
 DeployVM()
 {
     echo "Deploying linux VM"
@@ -57,14 +40,7 @@ DeployVM()
     --parameters $vmParametersFile
 }
 
-echo "Init variables"
 InitVariables
-
-echo "Create ResourceGroup"
 CreateResourceGroup
-
-echo "Deploy VM"
-DeployVM
-
-echo "Deploy Storage Accounts"
 DeployStorageAccounts
+DeployVM
