@@ -1,7 +1,7 @@
 #!/bin/bash
 #Install Azure CLI, Docker and .Net Framework on the linux VM
 
-vmName=$MACHINE_NAME
+vmName=$VM_NAME
 resourceGroupName=$GROUP_NAME
 
 echo "Variables: "
