@@ -64,8 +64,8 @@ DeployStorageAccounts
 DeployVM
 
 #Output the connection string to the yaml pipeline
-echo "##vso[task.setvariable variable=connectionStringA]$(GetConnectionString storageA)"
-echo "##vso[task.setvariable variable=connectionStringB]$(GetConnectionString storageB)"
+echo "##vso[task.setvariable variable=CONNECTION_STRING_A]$(GetConnectionString storageA)"
+echo "##vso[task.setvariable variable=CONNECTION_STRING_B]$(GetConnectionString storageB)"
 
 
 read

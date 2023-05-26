@@ -1,15 +1,15 @@
 #!/bin/bash
 #Install Azure CLI, Docker and .Net Framework on the linux VM
 
-machineName=$VM_NAME
+vmName=$MACHINE_NAME
 resourceGroupName=$GROUP_NAME
 
 echo "Variables: "
-echo "$machineName"
+echo "$vmName"
 echo "$resourceGroupName"
 
 az vm run-command invoke \
-    -n "$machineName" \
+    -n "$vmName" \
     -g "$resourceGroupName" \
     --command-id RunShellScript \
     --scripts "curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash" \
