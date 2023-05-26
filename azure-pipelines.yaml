@@ -7,17 +7,16 @@ steps:
     #   STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
     #   VM_DEPLOYMENT_NAME: $(vmDeploymentName)
     
-  - script: install-utilities.sh
-    displayName: "Install Utilities on VM"
-    workingDirectory: utility-scripts
-    env:
-      GROUP_NAME: $(groupName)
-      VM_NAME: $(vmName)
-      
-  # - script: handle-blobs.sh
-  #   displayName: "Handle Blobs on VM"
+  # - script: install-utilities.sh
+  #   displayName: "Install Utilities on VM"
+  #   workingDirectory: utility-scripts
   #   env:
-  #       GROUP_NAME: $(groupName)
-  #       VM_NAME: $(vmName)
-  #       CONNECTION_STRING_A: $(CONNECTION_STRING_A)
-  #       CONNECTION_STRING_B: $(CONNECTION_STRING_B)
+  #     GROUP_NAME: $(groupName)
+  #     VM_NAME: $(vmName)
+      
+  - script: handle-blobs.sh
+    displayName: "Handle Blobs on VM"
+    env:
+        GROUP_NAME: $(groupName)
+        VM_NAME: $(vmName)
+        STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
