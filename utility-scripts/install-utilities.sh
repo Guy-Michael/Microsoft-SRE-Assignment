@@ -5,12 +5,14 @@ machineName=$VM_NAME
 resourceGroupName=$GROUP_NAME
 
 # Check if both can work in one script
+{
 az vm run-command invoke \
     -n "$machineName" \
     -g "$resourceGroupName" \
+    --command-id RunShellScript \
     --scripts "curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash" \
                 "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh ./get-docker.sh"
-
+} >> ~/Desktop/files/log.txt
 
 # curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
