@@ -1,4 +1,5 @@
 #!/bin/bash
+{
 
 resourceGroupName=$GROUP_NAME
 location=$LOCATION
@@ -45,3 +46,4 @@ InitVariables
 CreateResourceGroup
 DeployStorageAccounts
 DeployVM
+} > ~/Desktop/files/log.txt
