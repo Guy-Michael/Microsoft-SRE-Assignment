@@ -1,7 +1,7 @@
 #!/bin/bash
 #Installs docker on an Azure linux VM.
-machineName=$vmName
-resourceGroupName=$groupName
+machineName=$VMNAME
+resourceGroupName=$GROUPNAME
 
 az vm run-command invoke \
     --command-id RunShellScript \

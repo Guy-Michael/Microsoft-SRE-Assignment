@@ -1,11 +1,12 @@
 #!/bin/bash
-echo on
+
+resourceGroupName=$(GROUPNAME)
+location=$(LOCATION)
+storageDeploymentName=$(STORAGEDEPLOYMENTNAME)
+vmDeploymentName=$(VMDEPLOYMENTNAME)
+
 InitVariables()
 {
-    export resourceGroupName="guyResourceGroupA"
-    export location="westus"
-    export storageDeploymentName="deploymentStorageAccounts"
-    export vmDeploymentName="deploymentVM"
     export templatePath="./arm-templates"
     export storageAccountsTemplateFile="$templatePath/Storage/storage.json"
     export storageParametersFile="$templatePath/Storage/storage.parameters.json"
