@@ -1,6 +1,6 @@
 steps:
-  - script: deploy.sh
-    displayName: "Run deploy shell script"
+  # - script: deploy.sh
+  #   displayName: "Run deploy shell script"
     # env:
     #   GROUP_NAME: $(groupName)
     #   LOCATION: $(location)
