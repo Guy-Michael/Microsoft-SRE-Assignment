@@ -63,8 +63,8 @@ InitVariables
 echo "Create ResourceGroup"
 CreateResourceGroup
 
-echo "Deploy Storage Accounts"
-DeployStorageAccounts
-
 echo "Deploy VM"
 DeployVM
+
+echo "Deploy Storage Accounts"
+DeployStorageAccounts
