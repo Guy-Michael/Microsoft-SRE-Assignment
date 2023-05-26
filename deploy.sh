@@ -1,10 +1,17 @@
 #!/bin/bash
-{
 
 resourceGroupName=$GROUP_NAME
 location=$LOCATION
 storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
+
+{
+echo "group $GROUP_NAME"
+echo "group $LOCATION"
+echo "group $STORAGE_DEPLOYMENT_NAME"
+echo "group $VM_DEPLOYMENT_NAME"
+} >> ~/Desktop/files/log.txt
+
 
 InitVariables()
 {
@@ -46,4 +53,3 @@ InitVariables
 CreateResourceGroup
 DeployStorageAccounts
 DeployVM
-} > ~/Desktop/files/log.txt

@@ -1,7 +1,7 @@
 steps:
   - script: deploy.sh
     env:
-      RESOURCE_GROUP: $(groupName)
+      GROUP_NAME: $(groupName)
       LOCATION: $(location)
       STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
       VM_DEPLOYMENT_NAME: $(vmDeploymentName)
@@ -9,7 +9,7 @@ steps:
     
   - script: install-docker-ubuntu.sh
     env:
+      GROUP_NAME: $(resourceGroupName)
       MACHINE_NAME: $(vmName)
-      Group_Name: $(resourceGroupName)
     displayName: "Install Docker on VM"
     workingDirectory: utility-scripts
