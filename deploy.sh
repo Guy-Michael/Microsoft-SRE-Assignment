@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo on
 InitVariables()
 {
     export resourceGroupName="guyResourceGroupA"

@@ -233,8 +233,7 @@
             "createOption": "FromImage",
             "managedDisk": {
               "storageAccountType": "[variables('osDiskType')]"
-            },
-            
+            }
           },
           "imageReference": "[variables('imageReference')[parameters('ubuntuOSVersion')]]"
         },
