@@ -4,6 +4,7 @@ resourceGroupName=$GROUP_NAME
 location=$LOCATION
 storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
+dashboardName="guysdashboard"
 
 InitVariables()
 {
@@ -12,6 +13,7 @@ InitVariables()
     export storageParametersFile="$templatePath/Storage/storage.parameters.json"
     export vmTemplateFile="$templatePath/VM/linuxVM.json"
     export vmParametersFile="$templatePath/VM/linuxVM.parameters.json"
+    export dashboardTemplateFile="$templatePath/Dashboard/dashboard.json"
 }
 
 CreateResourceGroup()
@@ -58,14 +60,23 @@ GetConnectionString()
     echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
 }
 
+CreateDashboard()
+{
+    az portal dashboard create \
+        --resource-group "$resourceGroupName" \
+        --name "$dashboardName" \
+        --input-path "$dashboardTemplateFile" \
+        --location "$location"
+}
+
 InitVariables
 CreateResourceGroup
 DeployStorageAccounts
 DeployVM
+CreateDashboard
 
 #Output the connection string to the yaml pipeline
 echo "##vso[task.setvariable variable=CONNECTION_STRING_A]$(GetConnectionString storageA)"
 echo "##vso[task.setvariable variable=CONNECTION_STRING_B]$(GetConnectionString storageB)"
-
 
 read

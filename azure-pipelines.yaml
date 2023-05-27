@@ -1,18 +1,18 @@
 steps:
-  # - script: deploy.sh
-  #   displayName: "Run deploy shell script"
-    # env:
-    #   GROUP_NAME: $(groupName)
-    #   LOCATION: $(location)
-    #   STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
-    #   VM_DEPLOYMENT_NAME: $(vmDeploymentName)
+  - script: deploy.sh
+    displayName: "Run deploy shell script"
+    env:
+      GROUP_NAME: $(groupName)
+      LOCATION: $(location)
+      STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
+      VM_DEPLOYMENT_NAME: $(vmDeploymentName)
     
-  # - script: install-utilities.sh
-  #   displayName: "Install Utilities on VM"
-  #   workingDirectory: utility-scripts
-  #   env:
-  #     GROUP_NAME: $(groupName)
-  #     VM_NAME: $(vmName)
+  - script: install-docker.sh
+    displayName: "Install Docker on VM"
+    workingDirectory: utility-scripts
+    env:
+      GROUP_NAME: $(groupName)
+      VM_NAME: $(vmName)
       
   - script: handle-blobs.sh
     displayName: "Handle Blobs on VM"

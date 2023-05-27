@@ -23,16 +23,11 @@ GetConnectionString()
 connectionStringA=$(GetConnectionString "storageA")
 connectionStringB=$(GetConnectionString "storageB")
 
-echo "Variables: "
-echo "$connectionStringA"
-echo "$connectionStringB"
-echo "$groupName"
-echo "$vmName"
-
 az vm run-command invoke \
     -g "$groupName" \
     -n "$vmName" \
     --command-id RunShellScript \
-    --script "docker pull guymichael275/dotnet-script" "docker run --env CONNECTION_STRING_A=$connectionStringA --env CONNECTION_STRING_B=$connectionStringB guymichael275/dotnet-script"
+    --script "sudo docker pull guymichael275/dotnet-script && sudo docker run guymichael275/dotnet-script $connectionStringA $connectionStringB"
+    # --script 'sudo docker run --env CONNECTION_STRING_A="$connectionStringA" --env CONNECTION_STRING_B="$connectionStringB" guymichael275/dotnet-script'
 
 read
