@@ -15,19 +15,11 @@
         "description": "Name of the resource group that contains the virtual machine"
       }
     },
-    "dashboardName": {
-      "type": "string",
-      "defaultValue": "guysDashboard",
-      "metadata": {
-        "Description": "Resource name that Azure portal uses for the dashboard"
-      }
+    "storageAccountNameA": {
+      "type": "string"
     },
-    "dashboardDisplayName": {
-      "type": "string",
-      "defaultValue": "Guy's Dashboard",
-      "metadata": {
-        "description": "Name of the dashboard to display in Azure portal"
-      }
+    "storageAccountNameB": {
+      "type": "string"
     }
   },
   "variables": {
@@ -35,24 +27,17 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Portal/dashboards",
-      "apiVersion": "2020-09-01-preview",
-      "name": "[parameters('dashboardName')]",
-      "location": "[variables('location')]",
-      "tags": {
-        "hidden-title": "[parameters('dashboardDisplayName')]"
-      },
       "properties": {
-        "lenses": [
-          {
+        "lenses": {
+          "0": {
             "order": 0,
-            "parts": [
-              {
+            "parts": {
+              "0": {
                 "position": {
                   "x": 0,
-                  "y": 4,
-                  "rowSpan": 3,
-                  "colSpan": 11
+                  "y": 0,
+                  "colSpan": 5,
+                  "rowSpan": 3
                 },
                 "metadata": {
                   "inputs": [
@@ -67,21 +52,22 @@
                         "metrics": [
                           {
                             "name": "Percentage CPU",
-                            "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                            "resourceId": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
                           }
                         ]
                       }
                     }
                   ],
-                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
+                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart",
+                  "settings": {}
                 }
               },
-              {
+              "1": {
                 "position": {
-                  "x": 0,
-                  "y": 7,
-                  "rowSpan": 2,
-                  "colSpan": 3
+                  "x": 5,
+                  "y": 0,
+                  "colSpan": 4,
+                  "rowSpan": 3
                 },
                 "metadata": {
                   "inputs": [
@@ -91,63 +77,35 @@
                         "timespan": {
                           "duration": "PT1H"
                         },
-                        "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
-                        "chartType": 0,
-                        "metrics": [
-                          {
-                            "name": "Disk Read Operations/Sec",
-                            "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
-                          },
-                          {
-                            "name": "Disk Write Operations/Sec",
-                            "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
-                          }
-                        ]
-                      }
-                    }
-                  ],
-                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
-                }
-              },
-              {
-                "position": {
-                  "x": 3,
-                  "y": 7,
-                  "rowSpan": 2,
-                  "colSpan": 3
-                },
-                "metadata": {
-                  "inputs": [
-                    {
-                      "name": "queryInputs",
-                      "value": {
-                        "timespan": {
-                          "duration": "PT1H"
-                        },
-                        "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
+                        "id": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
                         "chartType": 0,
                         "metrics": [
                           {
                             "name": "Disk Read Bytes",
-                            "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                            "resourceId": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
                           },
                           {
                             "name": "Disk Write Bytes",
-                            "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                            "resourceId": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
                           }
                         ]
                       }
                     }
                   ],
-                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
+                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart",
+                  "settings": {},
+                  "partHeader": {
+                    "title": "Disk Read / Write Bytes, last hour",
+                    "subtitle": ""
+                  }
                 }
               },
-              {
+              "2": {
                 "position": {
-                  "x": 6,
-                  "y": 7,
-                  "rowSpan": 2,
-                  "colSpan": 3
+                  "x": 9,
+                  "y": 0,
+                  "colSpan": 4,
+                  "rowSpan": 3
                 },
                 "metadata": {
                   "inputs": [
@@ -157,49 +115,529 @@
                         "timespan": {
                           "duration": "PT1H"
                         },
-                        "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
+                        "id": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
                         "chartType": 0,
                         "metrics": [
                           {
-                            "name": "Network In Total",
-                            "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                            "name": "Disk Read Operations/Sec",
+                            "resourceId": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
                           },
                           {
-                            "name": "Network Out Total",
-                            "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                            "name": "Disk Write Operations/Sec",
+                            "resourceId": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
                           }
                         ]
                       }
                     }
                   ],
-                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
+                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart",
+                  "settings": {},
+                  "partHeader": {
+                    "title": "Disk Read/Write/Sec, past hour",
+                    "subtitle": ""
+                  }
                 }
               },
-              {
+              "3": {
                 "position": {
-                  "x": 9,
-                  "y": 7,
-                  "rowSpan": 2,
-                  "colSpan": 2
+                  "x": 13,
+                  "y": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3
                 },
                 "metadata": {
                   "inputs": [
                     {
                       "name": "id",
-                      "value": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                      "value": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
                     }
                   ],
-                  "type": "Extension/Microsoft_Azure_Compute/PartType/VirtualMachinePart",
+                  "type": "Extension/HubsExtension/PartType/ResourcePart",
                   "asset": {
                     "idInputName": "id",
                     "type": "VirtualMachine"
                   }
                 }
+              },
+              "4": {
+                "position": {
+                  "x": 15,
+                  "y": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3
+                },
+                "metadata": {
+                  "inputs": [],
+                  "type": "Extension/Microsoft_Azure_Security/PartType/SecurityMetricGalleryTileViewModel"
+                }
+              },
+              "5": {
+                "position": {
+                  "x": 0,
+                  "y": 3,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "isOptional": true
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {
+                    "content": {
+                      "options": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "[subscriptionResourceId(subscription(), 'Microsoft.Storage', parameters('storageAccountNameA'))]"
+                              },
+                              "name": "Transactions",
+                              "aggregationType": 1,
+                              "namespace": "microsoft.storage/storageaccounts",
+                              "metricVisualization": {
+                                "displayName": "Transactions"
+                              }
+                            }
+                          ],
+                          "title": "Sum Transactions for devstorem7vvysekwkfbk1",
+                          "titleKind": 1,
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            },
+                            "disablePinning": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "6": {
+                "position": {
+                  "x": 6,
+                  "y": 3,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "isOptional": true
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {
+                    "content": {
+                      "options": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id":"[subscriptionResourceId(subscription(), 'Microsoft.Storage', parameters('storageAccountNameA'))]"
+                              },
+                              "name": "Transactions",
+                              "aggregationType": 1,
+                              "namespace": "microsoft.storage/storageaccounts",
+                              "metricVisualization": {
+                                "displayName": "Transactions"
+                              }
+                            }
+                          ],
+                          "title": "Sum Transactions for devstorem7vvysekwkfbk2",
+                          "titleKind": 1,
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            },
+                            "disablePinning": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "7": {
+                "position": {
+                  "x": 0,
+                  "y": 5,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "isOptional": true
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {
+                    "content": {
+                      "options": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "[subscriptionResourceId(subscription(), 'Microsoft.Storage', parameters('storageAccountNameB'))]"
+                              },
+                              "name": "UsedCapacity",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.storage/storageaccounts",
+                              "metricVisualization": {
+                                "displayName": "Used capacity"
+                              }
+                            }
+                          ],
+                          "title": "Avg Used capacity for devstorem7vvysekwkfbk1",
+                          "titleKind": 1,
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            },
+                            "disablePinning": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "8": {
+                "position": {
+                  "x": 6,
+                  "y": 5,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "options",
+                      "isOptional": true
+                    },
+                    {
+                      "name": "sharedTimeRange",
+                      "isOptional": true
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MonitorChartPart",
+                  "settings": {
+                    "content": {
+                      "options": {
+                        "chart": {
+                          "metrics": [
+                            {
+                              "resourceMetadata": {
+                                "id": "[subscriptionResourceId(subscription(), 'Microsoft.Storage', parameters('storageAccountNameB'))]"
+                              },
+                              "name": "UsedCapacity",
+                              "aggregationType": 4,
+                              "namespace": "microsoft.storage/storageaccounts",
+                              "metricVisualization": {
+                                "displayName": "Used capacity"
+                              }
+                            }
+                          ],
+                          "title": "Avg Used capacity for devstorem7vvysekwkfbk2",
+                          "titleKind": 1,
+                          "visualization": {
+                            "chartType": 2,
+                            "legendVisualization": {
+                              "isVisible": true,
+                              "position": 2,
+                              "hideSubtitle": false
+                            },
+                            "axisVisualization": {
+                              "x": {
+                                "isVisible": true,
+                                "axisType": 2
+                              },
+                              "y": {
+                                "isVisible": true,
+                                "axisType": 1
+                              }
+                            },
+                            "disablePinning": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            ]
+            }
           }
-        ]
-      }
+        },
+        "metadata": {
+          "model": {
+            "timeRange": {
+              "value": {
+                "relative": {
+                  "duration": 24,
+                  "timeUnit": 1
+                }
+              },
+              "type": "MsPortalFx.Composition.Configuration.ValueTypes.TimeRange"
+            },
+            "filterLocale": {
+              "value": "en-us"
+            },
+            "filters": {
+              "value": {
+                "MsPortalFx_TimeRange": {
+                  "model": {
+                    "format": "utc",
+                    "granularity": "auto",
+                    "relative": "24h"
+                  },
+                  "displayCache": {
+                    "name": "UTC Time",
+                    "value": "Past 24 hours"
+                  },
+                  "filteredPartIds": [
+                    "StartboardPart-MonitorChartPart-66476681-5d4f-46e9-af2e-e3feb8954287",
+                    "StartboardPart-MonitorChartPart-66476681-5d4f-46e9-af2e-e3feb895440c",
+                    "StartboardPart-MonitorChartPart-66476681-5d4f-46e9-af2e-e3feb8954537",
+                    "StartboardPart-MonitorChartPart-66476681-5d4f-46e9-af2e-e3feb8954543"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": "Guy's Dashboard",
+      "type": "Microsoft.Portal/dashboards",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "hidden-title": "Guy's Dashboard"
+      },
+      "apiVersion": "2015-08-01-preview"
     }
+    // {
+    //   "type": "Microsoft.Portal/dashboards",
+    //   "apiVersion": "2020-09-01-preview",
+    //   "name": "[parameters('dashboardName')]",
+    //   "location": "[variables('location')]",
+    //   "tags": {
+    //     "hidden-title": "[parameters('dashboardDisplayName')]"
+    //   },
+    //   "properties": {
+    //     "lenses": [
+    //       {
+    //         "order": 0,
+    //         "parts": [
+    //           {
+    //             "position": {
+    //               "x": 0,
+    //               "y": 4,
+    //               "rowSpan": 3,
+    //               "colSpan": 11
+    //             },
+    //             "metadata": {
+    //               "inputs": [
+    //                 {
+    //                   "name": "queryInputs",
+    //                   "value": {
+    //                     "timespan": {
+    //                       "duration": "PT1H"
+    //                     },
+    //                     "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
+    //                     "chartType": 0,
+    //                     "metrics": [
+    //                       {
+    //                         "name": "Percentage CPU",
+    //                         "resourceId": "[subscriptionResourceId(subscription(), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                       }
+    //                     ]
+    //                   }
+    //                 }
+    //               ],
+    //               "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
+    //             }
+    //           },
+    //           {
+    //             "position": {
+    //               "x": 0,
+    //               "y": 7,
+    //               "rowSpan": 2,
+    //               "colSpan": 3
+    //             },
+    //             "metadata": {
+    //               "inputs": [
+    //                 {
+    //                   "name": "queryInputs",
+    //                   "value": {
+    //                     "timespan": {
+    //                       "duration": "PT1H"
+    //                     },
+    //                     "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
+    //                     "chartType": 0,
+    //                     "metrics": [
+    //                       {
+    //                         "name": "Disk Read Operations/Sec",
+    //                         "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                       },
+    //                       {
+    //                         "name": "Disk Write Operations/Sec",
+    //                         "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                       }
+    //                     ]
+    //                   }
+    //                 }
+    //               ],
+    //               "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
+    //             }
+    //           },
+    //           {
+    //             "position": {
+    //               "x": 3,
+    //               "y": 7,
+    //               "rowSpan": 2,
+    //               "colSpan": 3
+    //             },
+    //             "metadata": {
+    //               "inputs": [
+    //                 {
+    //                   "name": "queryInputs",
+    //                   "value": {
+    //                     "timespan": {
+    //                       "duration": "PT1H"
+    //                     },
+    //                     "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
+    //                     "chartType": 0,
+    //                     "metrics": [
+    //                       {
+    //                         "name": "Disk Read Bytes",
+    //                         "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                       },
+    //                       {
+    //                         "name": "Disk Write Bytes",
+    //                         "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                       }
+    //                     ]
+    //                   }
+    //                 }
+    //               ],
+    //               "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
+    //             }
+    //           },
+    //           {
+    //             "position": {
+    //               "x": 6,
+    //               "y": 7,
+    //               "rowSpan": 2,
+    //               "colSpan": 3
+    //             },
+    //             "metadata": {
+    //               "inputs": [
+    //                 {
+    //                   "name": "queryInputs",
+    //                   "value": {
+    //                     "timespan": {
+    //                       "duration": "PT1H"
+    //                     },
+    //                     "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]",
+    //                     "chartType": 0,
+    //                     "metrics": [
+    //                       {
+    //                         "name": "Network In Total",
+    //                         "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                       },
+    //                       {
+    //                         "name": "Network Out Total",
+    //                         "resourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                       }
+    //                     ]
+    //                   }
+    //                 }
+    //               ],
+    //               "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart"
+    //             }
+    //           },
+    //           {
+    //             "position": {
+    //               "x": 9,
+    //               "y": 7,
+    //               "rowSpan": 2,
+    //               "colSpan": 2
+    //             },
+    //             "metadata": {
+    //               "inputs": [
+    //                 {
+    //                   "name": "id",
+    //                   "value": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+    //                 }
+    //               ],
+    //               "type": "Extension/Microsoft_Azure_Compute/PartType/VirtualMachinePart",
+    //               "asset": {
+    //                 "idInputName": "id",
+    //                 "type": "VirtualMachine"
+    //               }
+    //             }
+    //           }
+    //         ]
+    //       }
+    //     ]
+    //   }
+    // }
   ]
 }

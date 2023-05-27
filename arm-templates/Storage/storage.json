@@ -25,8 +25,8 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "storageAName": "[concat(parameters('storagePrefix'), uniqueString(resourceGroup().id), '1')]",
-    "storageBName": "[concat(parameters('storagePrefix'), uniqueString(resourceGroup().id), '2')]"
+    "storageAName": "[concat(parameters('storagePrefix'), '-', uniqueString(resourceGroup().id), '1')]",
+    "storageBName": "[concat(parameters('storagePrefix'), '-', uniqueString(resourceGroup().id), '2')]"
   },
   "resources": [
     {

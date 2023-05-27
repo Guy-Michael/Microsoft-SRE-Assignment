@@ -5,11 +5,11 @@
       "vmName": {
       "value": "simpleLinuxVM"
     },
-    "dashboardName": {
-      "value": "guysDashboard"
+    "storageAccountNameA": {
+        "value": "placeholder"
     },
-    "dashboardDisplayName": {
-      "value": "Guy's Dashboard"
+    "storageAccountNameB": {
+        "value": "placeholder"
     }
   }
 }

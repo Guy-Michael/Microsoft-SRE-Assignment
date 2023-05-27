@@ -44,23 +44,27 @@ DeployVM()
 
 CreateDashboard()
 {
+    storageNameA="devstorem7vvysekwkfbk1"
+    storageNameB="devstorem7vvysekwkfbk2"
+
     az deployment group create \
         --name "$dashboardDeploymentName" \
         --resource-group "$resourceGroupName" \
         --template-file "$dashboardTemplateFile" \
-        --parameters "$dashboardParametersFile"
+        --parameters "$dashboardParametersFile" \
+        --parameters storageNameA="$storageNameA" storageNameB="$storageNameB"
 }
 
 InitVariables
 
-echo "Creating a resource group named $resourceGroupName"
-CreateResourceGroup
+# echo "Creating a resource group named $resourceGroupName"
+# CreateResourceGroup
 
-echo "Deploying 2 storage accounts"
-DeployStorageAccounts
+# echo "Deploying 2 storage accounts"
+# DeployStorageAccounts
 
-echo "Deploying Linux VM"
-DeployVM
+# echo "Deploying Linux VM"
+# DeployVM
 
 echo "Deploying Dashboard"
 CreateDashboard

@@ -9,17 +9,17 @@ steps:
       VM_DEPLOYMENT_NAME: $(vmDeploymentName)
       DASHBOARD_DEPLOYMENT_NAME: $(dashboardDeploymentName)
 
-  - script: install-docker.sh
-    displayName: "Install Docker on VM"
-    workingDirectory: scripts
-    env:
-      GROUP_NAME: $(groupName)
-      VM_DEPLOYMENT_NAME: $(vmDeploymentName)
+  # - script: install-docker.sh
+  #   displayName: "Install Docker on VM"
+  #   workingDirectory: scripts
+  #   env:
+  #     GROUP_NAME: $(groupName)
+  #     VM_DEPLOYMENT_NAME: $(vmDeploymentName)
 
-  - script: handle-blobs.sh
-    displayName: "Handle Blobs on VM"
-    workingDirectory: scripts
-    env:
-        GROUP_NAME: $(groupName)
-        VM_DEPLOYMENT_NAME: $(vmDeploymentName)
-        STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
+  # - script: handle-blobs.sh
+  #   displayName: "Handle Blobs on VM"
+  #   workingDirectory: scripts
+  #   env:
+  #       GROUP_NAME: $(groupName)
+  #       VM_DEPLOYMENT_NAME: $(vmDeploymentName)
+  #       STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
