@@ -80,11 +80,11 @@ CreateDashboard()
 
 InitVariables
 
-echo "Creating a resource group named $resourceGroupName"
-CreateResourceGroup
+# echo "Creating a resource group named $resourceGroupName"
+# CreateResourceGroup
 
-echo "Deploying 2 storage accounts"
-DeployStorageAccounts
+# echo "Deploying 2 storage accounts"
+# DeployStorageAccounts
 
 echo "Deploying Linux VM"
 sshIdentification=$(DeployVM)
