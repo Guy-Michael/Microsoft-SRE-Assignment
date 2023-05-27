@@ -6,6 +6,7 @@ steps:
       LOCATION: $(location)
       STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
       VM_DEPLOYMENT_NAME: $(vmDeploymentName)
+      DASHBOARD_DEPLOYMENT_NAME: $(dashboardDeploymentName)
     
   - script: install-docker.sh
     displayName: "Install Docker on VM"

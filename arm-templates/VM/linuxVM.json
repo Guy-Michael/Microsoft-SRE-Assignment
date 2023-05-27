@@ -12,16 +12,15 @@
     },
     "authenticationType": {
       "type": "string",
-      "defaultValue": "password",
+      "defaultValue": "sshPublicKey",
       "allowedValues": [
-        "sshPublicKey",
-        "password"
+        "sshPublicKey"
       ]
     },
     "adminPasswordOrKey": {
       "type": "securestring",
       "metadata": {
-        "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
+        "description": "public SSH Key."
       }
     },
     "dnsLabelPrefix": {

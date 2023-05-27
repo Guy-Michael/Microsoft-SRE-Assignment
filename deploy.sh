@@ -4,7 +4,7 @@ resourceGroupName=$GROUP_NAME
 location=$LOCATION
 storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
-dashboardName="guysdashboard"
+dashboardDeploymentName=$DASHBOARD_DEPLOYMENT_NAME
 
 InitVariables()
 {
@@ -14,6 +14,7 @@ InitVariables()
     export vmTemplateFile="$templatePath/VM/linuxVM.json"
     export vmParametersFile="$templatePath/VM/linuxVM.parameters.json"
     export dashboardTemplateFile="$templatePath/Dashboard/dashboard.json"
+    export dashboardParametersFile="$templatePath/Dashboard/dashboard.parameters.json"
 }
 
 CreateResourceGroup()
@@ -51,22 +52,34 @@ GetConnectionString()
         --query properties.outputs.$1.value \
         --output tsv)
 
-    local key=$(az storage account keys list \
+    local connectionString=$(az storage account show-connection-string \
+        --name "$accountName" \
         --resource-group "$resourceGroupName" \
-        -n "$accountName" \
-        --query [0].value \
-        --output tsv)
+        --query connectionString)
 
-    echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
+    echo "$connectionString"
+    # local key=$(az storage account keys list \
+    #     --resource-group "$resourceGroupName" \
+    #     -n "$accountName" \
+    #     --query [0].value \
+    #     --output tsv)
+
+    # echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
 }
 
 CreateDashboard()
 {
-    az portal dashboard create \
+    az deployment group create \
+        --name "$dashboardDeploymentName" \
         --resource-group "$resourceGroupName" \
-        --name "$dashboardName" \
-        --input-path "$dashboardTemplateFile" \
-        --location "$location"
+        --template-file "$dashboardTemplateFile" \
+        --parameters "$dashboardParametersFile"
+
+    # az portal dashboard create \
+    #     --resource-group "$resourceGroupName" \
+    #     --name "$dashboardName" \
+    #     --input-path "$dashboardTemplateFile" \
+    #     --location "$location"
 }
 
 InitVariables

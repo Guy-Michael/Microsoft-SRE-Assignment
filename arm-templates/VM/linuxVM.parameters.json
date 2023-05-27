@@ -9,10 +9,11 @@
             "value": "guy"
         },
         "authenticationType": {
-            "value": "password"
+            "value": "sshPublicKey"
         },
         "adminPasswordOrKey": {
-            "value": "Guy123456"
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDGWDsVgpe06iNuL8EPW+yLGcHXaC8DykZIRtQ4/Koy9hs9TMqn13O/RiDz3Ax4HYlpREyZ2zAvx3IF30tXLvs0T1pxuLIKOiL9CjtSzkdK81Rut/9U8xMFpTChCBFB670Qkzweayd5X1FcdEV6AsatgsEeXi9ODJwdRHAF79TBWm8QdtIwFVpXzMXltOqu74XG21beK4uzQq+a9g730cKkqmd1ghDohWpM7oo2GKhdNL0N+/sgDKTX+KYkx9039to0iCI2JiFeBuEdquiggXI9vFIG6Uy5EpsLHzG6tCs1D//B9X8yQ/6USmd4BO7cTLPpeYXKZDiBrP0RjjeSrNgabcuSXrGhcLp2rBkgM/jAvsirEzu52UasWAwMLhcDG6sL6K2alx1/Qi1SijdGcnqEQs0rKY0SQzGHhXDm0QTbYvKVutUUO8h4D1PiT4VaKUjUrdsALSrFWZoiHL2VOgHv6Gh2qVlS+rdsCvoYTt4dIu8ReXK0f/BEDS64sTtPc4gkt5/b8rGEjIsY7s6FtXe1dy3oUeE7EAjIN3w4lpPbWK2Lq0ObP/ulJbrmB9exskpRZXCC9NnvLgVjsUyFLm5sIWmrtxfo6XactI3Ed0Pb9lx7wggc77+AQ8/gEao09rSz2GDuFxjfY3iynQd4YWfRl7+pKKLscT65mpS1L1sYWw== guy.danino5@gmail.com"
+
         },
         "ubuntuOSVersion": {
             "value": "Ubuntu-2004"
