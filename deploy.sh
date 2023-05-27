@@ -19,33 +19,32 @@ InitVariables()
 
 CreateResourceGroup()
 {
-    echo "Creating a resource group named $resourceGroupName"
-    az group create --name $resourceGroupName --location $location
+    az group create \
+        --name $resourceGroupName \
+        --location $location
 }
 
 DeployStorageAccounts()
 {
-    echo "Deploying 2 storage accounts"
-    local publicIp=$(az deployment group create \
+    az deployment group create \
         --name $storageDeploymentName \
         --resource-group $resourceGroupName \
         --template-file $storageAccountsTemplateFile \
         --parameters $storageParametersFile \
-        --query properties.output.publicIp.value \
-        --output tsv)
 
-    echo "$publicIp"
 }
 
 DeployVM()
 {
-    echo "Deploying linux VM"
-
-    az deployment group create \
+    local sshIdentification=$(az deployment group create \
     --name $vmDeploymentName \
     --resource-group $resourceGroupName \
     --template-file $vmTemplateFile \
-    --parameters $vmParametersFile
+    --parameters $vmParametersFile \
+    --query properties.output.publicIp.value \
+    --output tsv)
+
+    echo "$sshIdentification"
 }
 
 GetConnectionString()
@@ -80,14 +79,22 @@ CreateDashboard()
 }
 
 InitVariables
+
+echo "Creating a resource group named $resourceGroupName"
 CreateResourceGroup
+
+echo "Deploying 2 storage accounts"
 DeployStorageAccounts
-publicIp=$(DeployVM)
+
+echo "Deploying Linux VM"
+sshIdentification=$(DeployVM)
+
+echo "Deploying Dashboard"
 CreateDashboard
 
 #Output the connection string to the yaml pipeline
 echo "##vso[task.setvariable variable=CONNECTION_STRING_A]$(GetConnectionString storageA)"
 echo "##vso[task.setvariable variable=CONNECTION_STRING_B]$(GetConnectionString storageB)"
-echo "##vso[task.setvariable variable=PUBLIC_IP]$publicIp"
+echo "##vso[task.setvariable variable=SSH_IDENTIFICATION]$sshIdentification"
 
 read

@@ -12,12 +12,17 @@ steps:
     displayName: "Install Docker on VM"
     workingDirectory: utility-scripts
     env:
+      SSH_IDENTIFICATION: $(sshIdentification)
+
       GROUP_NAME: $(groupName)
       VM_NAME: $(vmName)
       
   - script: handle-blobs.sh
     displayName: "Handle Blobs on VM"
     env:
+        CONNECTION_STRING_A: $(connectionStringA)
+        CONNECTION_STRING_B: $(connectionStringB)
+        SSH_IDENTIFICATION: $(sshIdentification)
         GROUP_NAME: $(groupName)
         VM_NAME: $(vmName)
         STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)

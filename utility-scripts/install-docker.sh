@@ -1,13 +1,12 @@
 #!/bin/bash
-#Install Azure CLI, Docker and .Net Framework on the linux VM
+#Install Docker
 
-vmName=$VM_NAME
-resourceGroupName=$GROUP_NAME
+sshIdentification=$SSH_IDENTIFICATION
+pathToLocalPrivateKey="$HOME/.ssh/id_rsa"
 
-az vm run-command invoke \
-    -n "$vmName" \
-    -g "$resourceGroupName" \
-    --command-id RunShellScript \
-    --scripts "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh ./get-docker.sh"
+ssh "$sshIdentification" \
+    -qi "$pathToLocalPrivateKey" \
+    -o StrictHostKeychecking=no \
+    "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh ./get-docker.sh"
 
 read
