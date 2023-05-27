@@ -27,40 +27,19 @@ CreateResourceGroup()
 DeployStorageAccounts()
 {
     az deployment group create \
-        --name $storageDeploymentName \
-        --resource-group $resourceGroupName \
-        --template-file $storageAccountsTemplateFile \
-        --parameters $storageParametersFile \
-
+        --name "$storageDeploymentName" \
+        --resource-group "$resourceGroupName" \
+        --template-file "$storageAccountsTemplateFile" \
+        --parameters "$storageParametersFile"
 }
 
 DeployVM()
 {
-    local sshIdentification=$(az deployment group create \
-    --name $vmDeploymentName \
-    --resource-group $resourceGroupName \
+    az deployment group create \
+    --name "$vmDeploymentName" \
+    --resource-group "$resourceGroupName" \
     --template-file $vmTemplateFile \
-    --parameters $vmParametersFile \
-    --query properties.output.publicIp.value \
-    --output tsv)
-
-    echo "$sshIdentification"
-}
-
-GetConnectionString()
-{
-    local accountName=$(az deployment group show \
-        -g "$resourceGroupName" \
-        -n "$storageDeploymentName" \
-        --query properties.outputs.$1.value \
-        --output tsv)
-
-    local connectionString=$(az storage account show-connection-string \
-        --name "$accountName" \
-        --resource-group "$resourceGroupName" \
-        --query connectionString)
-
-    echo "$connectionString"
+    --parameters "$vmParametersFile"
 }
 
 CreateDashboard()
@@ -70,31 +49,18 @@ CreateDashboard()
         --resource-group "$resourceGroupName" \
         --template-file "$dashboardTemplateFile" \
         --parameters "$dashboardParametersFile"
-
-    # az portal dashboard create \
-    #     --resource-group "$resourceGroupName" \
-    #     --name "$dashboardName" \
-    #     --input-path "$dashboardTemplateFile" \
-    #     --location "$location"
 }
 
 InitVariables
 
-# echo "Creating a resource group named $resourceGroupName"
-# CreateResourceGroup
-
-# echo "Deploying 2 storage accounts"
-# DeployStorageAccounts
+echo "Creating a resource group named $resourceGroupName"
+CreateResourceGroup
 
 echo "Deploying Linux VM"
-sshIdentification=$(DeployVM)
+DeployVM
 
 echo "Deploying Dashboard"
 CreateDashboard
 
-#Output the connection string to the yaml pipeline
-echo "##vso[task.setvariable variable=CONNECTION_STRING_A]$(GetConnectionString storageA)"
-echo "##vso[task.setvariable variable=CONNECTION_STRING_B]$(GetConnectionString storageB)"
-echo "##vso[task.setvariable variable=SSH_IDENTIFICATION]$sshIdentification"
-
-read
+echo "Deploying 2 storage accounts"
+DeployStorageAccounts

@@ -1,40 +1,52 @@
 #!/bin/bash
 
-connectionStringA=$CONNECTION_STRING_A
-connectionStringB=$CONNECTION_STRING_B
-sshIdentification=$SSH_IDENTIFICATION
-pathToLocalPrivateKey="$HOME/.ssh/id_rsa"
+groupName=$GROUP_NAME
+storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
+vmDeploymentName=$VM_DEPLOYMENT_NAME
+
+echo "Variables:"
+echo "$groupName"
+echo "$storageDeploymentName"
+echo "$vmDeploymentName"
+
+
+
+GetConnectionString()
+{
+    local accountName=$(az deployment group show \
+        --resource-group "$groupName" \
+        --name "$storageDeploymentName" \
+        --query properties.outputs."$1".value \
+        --output tsv)
+
+    local connectionString=$(az storage account show-connection-string \
+        --name "$accountName" \
+        --resource-group "$resourceGroupName" \
+        --query connectionString)
+
+    echo "$connectionString"
+}
+
+GetSSHIdentification()
+{
+    local sshIdentification=$(az deployment group show \
+    --name "$vmDeploymentName" \
+    --resource-group "$groupName" \
+    --query properties.outputs.sshIdentification.value \
+    --output tsv)
+
+    echo $sshIdentification
+}
+
+connectionStringA=$(GetConnectionString "storageA")
+connectionStringB=$(GetConnectionString "storageB")
+sshIdentification=$(GetSSHIdentification)
 
 ssh "$sshIdentification" \
-    -qi "$pathToLocalPrivateKey" \
-    -o StrictHostKeychecking=no \
-    "sudo docker pull guymichael275/dotnet-script"
+    "sudo docker pull guymichael275/blobs-logic"
 
 ssh "$sshIdentification" \
-    -qi "$pathToLocalPrivateKey" \
-    -o StrictHostKeychecking=no \
-    "sudo docker run guymichael275/dotnet-script $connectionStringA $connectionStringB"
-
-# groupName=$GROUP_NAME
-# vmName=$VM_NAME
-# storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
-
-# GetConnectionString()
-# {
-#     local accountName=$(az deployment group show \
-#         -g "$groupName" \
-#         -n "$storageDeploymentName" \
-#         --query properties.outputs.$1.value \
-#         --output tsv)
-
-#     local key=$(az storage account keys list \
-#         --resource-group "$groupName" \
-#         -n "$accountName" \
-#         --query [0].value \
-#         --output tsv)
-
-#     echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
-# }
+    "sudo docker run guymichael275/blobs-logic $connectionStringA $connectionStringB"
 
 # connectionStringA=$(GetConnectionString "storageA")
 # connectionStringB=$(GetConnectionString "storageB")

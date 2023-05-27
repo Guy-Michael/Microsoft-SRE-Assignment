@@ -3,25 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "vmName": {
-      "value": "simpleLinuxVM",
-      "metadata": {
-        "description": "Name of the existing virtual machine to show in the dashboard"
-      }
+      "value": "simpleLinuxVM"
     },
     "dashboardName": {
-      "value": "[guid(parameters('vmName'), parameters('resourceGroupName'))]",
-      "metadata": {
-        "Description": "Resource name that Azure portal uses for the dashboard"
-      }
+      "value": "guysDashboard"
     },
     "dashboardDisplayName": {
-      "value": "Guy's Dashboard",
-      "metadata": {
-        "description": "Name of the dashboard to display in Azure portal"
-      }
-    },
-    "location": {
-      "value": "[resourceGroup().location]"
+      "value": "Guy's Dashboard"
     }
   }
 }
