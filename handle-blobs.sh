@@ -1,93 +1,43 @@
 #!/bin/bash
-resourceGroupName=$1
-storageDeploymentName=$2
-containerNameA="dev-container-a-$RANDOM"
-containerNameB="dev-container-b-$RANDOM"
 
-generateSasToken()
-{
-    local expiry=$(date -u -d "+1 hour" "+%Y-%m-%dT%H:%M:%SZ")
-    local sasToken=$(az storage account generate-sas \
-    --permissions acdlruw \
-    --expiry "$expiry" \
-    --connection-string "$1" \
-    --resource-types c \
-    --services bf \
-    --resource-types c)
-
-    echo $sasToken
-}
+groupName=$GROUP_NAME
+storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
+vmDeploymentName=$VM_DEPLOYMENT_NAME
 
 GetConnectionString()
 {
-    local key=$(az storage account keys list \
-        --resource-group "$resourceGroupName" \
-        -n "$1" \
-        --query [0].value \
-        --output tsv)
-
-    echo "DefaultEndpointsProtocol=https;AccountName=$1;AccountKey=$key;EndpointSuffix=core.windows.net";
-}
-
-createStorageContainer()
-{
-    az storage container create \
-    --name "$1"\
-    --connection-string "$2"
-}
-
-GetStorageAccountName()
-{
     local accountName=$(az deployment group show \
-        -g $resourceGroupName \
-        -n $storageDeploymentName \
-        --query properties.outputs.$1.value \
+        --resource-group "$groupName" \
+        --name "$storageDeploymentName" \
+        --query properties.outputs."$1".value \
         --output tsv)
 
-    echo $accountName
+    local connectionString=$(az storage account show-connection-string \
+        --name "$accountName" \
+        --resource-group "$resourceGroupName" \
+        --query connectionString)
+
+    echo "$connectionString"
 }
 
-GenerateLocalFiles()
+GetSSHIdentification()
 {
-    mkdir files
-    path="./files"
+    local sshIdentification=$(az deployment group show \
+    --name "$vmDeploymentName" \
+    --resource-group "$groupName" \
+    --query properties.outputs.sshIdentification.value \
+    --output tsv)
 
-    for i in {1..100}
-    do
-        echo "Hi! I'm Blob #$i!" >> "$path/Blob$i"
-    done
+    echo $sshIdentification
 }
 
-UploadFilesToStorageA()
-{
-    az storage blob upload-batch \
-    --account-name "$accountNameA" \
-    --connection-string "$connectionStringA" \
-    --destination $containerNameA \
-    --source "./files"
-}
+connectionStringA=$(GetConnectionString "storageA")
+connectionStringB=$(GetConnectionString "storageB")
+sshIdentification=$(GetSSHIdentification)
 
-CopyFilesToStorageB()
-{
-    az storage copy \
-    --source $containerUrlA \
-    --destination $containerUrlB \
-    --recursive
-}
+ssh "$sshIdentification" \
+    "sudo docker pull guymichael275/blobs-logic"
 
-accountNameA=$(GetStorageAccountName "storageA")
-accountNameB=$(GetStorageAccountName "storageB")
-
-connectionStringA=$(GetConnectionString "$accountNameA")
-connectionStringB=$(GetConnectionString "$accountNameB")
-
-createStorageContainer "$containerNameA" "$connectionStringA"
-createStorageContainer "$containerNameB" "$connectionStringB"
-
-containerUrlA="https://$accountNameA.blob.core.windows.net/$containerNameA"
-containerUrlB="https://$accountNameB.blob.core.windows.net/$containerNameB"
-
-UploadFilesToStorageA
-CopyFilesToStorageB
-
-rm -rf ./files
+ssh "$sshIdentification" \
+    -o StrictHostKeychecking=no \
+    "sudo docker run guymichael275/blobs-logic $connectionStringA $connectionStringB"
