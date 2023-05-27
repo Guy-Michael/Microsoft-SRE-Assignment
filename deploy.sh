@@ -26,11 +26,15 @@ CreateResourceGroup()
 DeployStorageAccounts()
 {
     echo "Deploying 2 storage accounts"
-    az deployment group create \
+    local publicIp=$(az deployment group create \
         --name $storageDeploymentName \
         --resource-group $resourceGroupName \
         --template-file $storageAccountsTemplateFile \
-        --parameters $storageParametersFile
+        --parameters $storageParametersFile \
+        --query properties.output.publicIp.value \
+        --output tsv)
+
+    echo "$publicIp"
 }
 
 DeployVM()
@@ -58,13 +62,6 @@ GetConnectionString()
         --query connectionString)
 
     echo "$connectionString"
-    # local key=$(az storage account keys list \
-    #     --resource-group "$resourceGroupName" \
-    #     -n "$accountName" \
-    #     --query [0].value \
-    #     --output tsv)
-
-    # echo "DefaultEndpointsProtocol=https;AccountName=$accountName;AccountKey=$key;EndpointSuffix=core.windows.net";
 }
 
 CreateDashboard()
@@ -85,11 +82,12 @@ CreateDashboard()
 InitVariables
 CreateResourceGroup
 DeployStorageAccounts
-DeployVM
+publicIp=$(DeployVM)
 CreateDashboard
 
 #Output the connection string to the yaml pipeline
 echo "##vso[task.setvariable variable=CONNECTION_STRING_A]$(GetConnectionString storageA)"
 echo "##vso[task.setvariable variable=CONNECTION_STRING_B]$(GetConnectionString storageB)"
+echo "##vso[task.setvariable variable=PUBLIC_IP]$publicIp"
 
 read
