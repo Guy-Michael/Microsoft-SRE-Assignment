@@ -56,11 +56,11 @@ InitVariables
 echo "Creating a resource group named $resourceGroupName"
 CreateResourceGroup
 
+echo "Deploying 2 storage accounts"
+DeployStorageAccounts
+
 echo "Deploying Linux VM"
 DeployVM
 
 echo "Deploying Dashboard"
 CreateDashboard
-
-echo "Deploying 2 storage accounts"
-DeployStorageAccounts

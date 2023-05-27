@@ -4,13 +4,6 @@ groupName=$GROUP_NAME
 storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
 
-echo "Variables:"
-echo "$groupName"
-echo "$storageDeploymentName"
-echo "$vmDeploymentName"
-
-
-
 GetConnectionString()
 {
     local accountName=$(az deployment group show \
@@ -46,16 +39,5 @@ ssh "$sshIdentification" \
     "sudo docker pull guymichael275/blobs-logic"
 
 ssh "$sshIdentification" \
+    -o StrictHostKeychecking=no \
     "sudo docker run guymichael275/blobs-logic $connectionStringA $connectionStringB"
-
-# connectionStringA=$(GetConnectionString "storageA")
-# connectionStringB=$(GetConnectionString "storageB")
-
-# az vm run-command invoke \
-#     -g "$groupName" \
-#     -n "$vmName" \
-#     --command-id RunShellScript \
-#     --script "sudo docker pull guymichael275/dotnet-script && sudo docker run guymichael275/dotnet-script $connectionStringA $connectionStringB"
-    # --script 'sudo docker run --env CONNECTION_STRING_A="$connectionStringA" --env CONNECTION_STRING_B="$connectionStringB" guymichael275/dotnet-script'
-
-read

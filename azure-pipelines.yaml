@@ -1,12 +1,12 @@
 steps:
-  # - script: deploy.sh
-  #   displayName: "Run deploy shell script"
-  #   env:
-  #     GROUP_NAME: $(groupName)
-  #     LOCATION: $(location)
-  #     STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
-  #     VM_DEPLOYMENT_NAME: $(vmDeploymentName)
-  #     DASHBOARD_DEPLOYMENT_NAME: $(dashboardDeploymentName)
+  - script: deploy.sh
+    displayName: "Run deploy shell script"
+    env:
+      GROUP_NAME: $(groupName)
+      LOCATION: $(location)
+      STORAGE_DEPLOYMENT_NAME: $(storageDeploymentName)
+      VM_DEPLOYMENT_NAME: $(vmDeploymentName)
+      DASHBOARD_DEPLOYMENT_NAME: $(dashboardDeploymentName)
 
   - script: install-docker.sh
     displayName: "Install Docker on VM"
