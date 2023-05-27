@@ -1,19 +1,12 @@
 #!/bin/bash
 
 groupName=$GROUP_NAME
-storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
 
 GetConnectionString()
 {
-    local accountName=$(az deployment group show \
-        --resource-group "$groupName" \
-        --name "$storageDeploymentName" \
-        --query properties.outputs."$1".value \
-        --output tsv)
-
     local connectionString=$(az storage account show-connection-string \
-        --name "$accountName" \
+        --name "$1" \
         --resource-group "$resourceGroupName" \
         --query connectionString)
 

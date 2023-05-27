@@ -1,6 +1,7 @@
 steps:
   - script: deploy.sh
     displayName: "Run deploy shell script"
+    workingDirectory: scripts
     env:
       GROUP_NAME: $(groupName)
       LOCATION: $(location)
@@ -10,13 +11,14 @@ steps:
 
   - script: install-docker.sh
     displayName: "Install Docker on VM"
-    workingDirectory: utility-scripts
+    workingDirectory: scripts
     env:
       GROUP_NAME: $(groupName)
       VM_DEPLOYMENT_NAME: $(vmDeploymentName)
-      
+
   - script: handle-blobs.sh
     displayName: "Handle Blobs on VM"
+    workingDirectory: scripts
     env:
         GROUP_NAME: $(groupName)
         VM_DEPLOYMENT_NAME: $(vmDeploymentName)

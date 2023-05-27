@@ -8,7 +8,7 @@ dashboardDeploymentName=$DASHBOARD_DEPLOYMENT_NAME
 
 InitVariables()
 {
-    export templatePath="./arm-templates"
+    export templatePath="../arm-templates"
     export storageAccountsTemplateFile="$templatePath/Storage/storage.json"
     export storageParametersFile="$templatePath/Storage/storage.parameters.json"
     export vmTemplateFile="$templatePath/VM/linuxVM.json"
