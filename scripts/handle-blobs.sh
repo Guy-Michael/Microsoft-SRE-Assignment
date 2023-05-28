@@ -2,11 +2,18 @@
 
 groupName=$GROUP_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
+storageDeploymentNAme=$STORAGE_DEPLOYMENT_NAME
 
 GetConnectionString()
 {
+    local accountName=$(az deployment group show \
+        -n "$storageDeploymentNAme" \
+        -g "$groupName" \
+        --query properties.outputs."$1".value \
+        --output tsv)
+
     local connectionString=$(az storage account show-connection-string \
-        --name "$1" \
+        --name "$accountName" \
         --resource-group "$resourceGroupName" \
         --query connectionString)
 

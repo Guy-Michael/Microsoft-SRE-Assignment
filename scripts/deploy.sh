@@ -4,7 +4,6 @@ resourceGroupName=$GROUP_NAME
 location=$LOCATION
 storageDeploymentName=$STORAGE_DEPLOYMENT_NAME
 vmDeploymentName=$VM_DEPLOYMENT_NAME
-dashboardDeploymentName=$DASHBOARD_DEPLOYMENT_NAME
 
 InitVariables()
 {
@@ -42,15 +41,6 @@ DeployVM()
     --parameters "$vmParametersFile"
 }
 
-CreateDashboard()
-{
-    az deployment group create \
-        --name "$dashboardDeploymentName" \
-        --resource-group "$resourceGroupName" \
-        --template-file "$dashboardTemplateFile" \
-        --parameters "$dashboardParametersFile"
-}
-
 InitVariables
 
 echo "Creating a resource group named $resourceGroupName"
@@ -61,6 +51,3 @@ DeployStorageAccounts
 
 echo "Deploying Linux VM"
 DeployVM
-
-echo "Deploying Dashboard"
-CreateDashboard
