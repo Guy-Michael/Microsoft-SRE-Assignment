@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# This script is now obselete Because I couldn't authenticate Azure CLI on the VM,
+# This script uses the Azure CLI to handle the blob operations.
+# The CD pipeline uses the "UploadAndCopyBlobs.csx" script via Docker.
+
 resourceGroupName=$1
 storageDeploymentName=$2
 containerNameA="dev-container-a-$RANDOM"
